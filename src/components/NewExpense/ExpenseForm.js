@@ -6,6 +6,7 @@ const ExpenseForm = props => {
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState('');
+  const [formVisible, setFormVisible] = useState(false);
 
   const titleChangeHandler = event => {
     setTitle(event.target.value);
@@ -21,12 +22,15 @@ const ExpenseForm = props => {
 
   const submitHandler = event => {
     event.preventDefault();
+    console.log(date);
 
     const data = {
       title: title,
-      amount: amount,
-      date: new Date(date),
+      amount: +amount,
+      date: new Date(date + 'T12:00:00Z'),
     };
+
+    console.log(data);
 
     props.onSaveExpenseData(data);
 
@@ -35,7 +39,7 @@ const ExpenseForm = props => {
     setDate('');
   };
 
-  return (
+  return formVisible ? (
     <form onSubmit={submitHandler}>
       <div className="new-expense__controls">
         <div className="new-expense__control">
@@ -54,9 +58,18 @@ const ExpenseForm = props => {
         </div>
       </div>
       <div className="new-expense__actions">
+        <button type="button" onClick={() => setFormVisible(false)}>
+          cancel
+        </button>
         <button type="submit">Add Expense</button>
       </div>
     </form>
+  ) : (
+    <div>
+      <button type="button" onClick={() => setFormVisible(true)}>
+        Add new Expense
+      </button>
+    </div>
   );
 };
 
